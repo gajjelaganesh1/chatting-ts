@@ -1,0 +1,46 @@
+const express = require("express");
+const http = require("http");
+const cors = require("cors");
+const { Server } = require("socket.io");
+
+const app = express();
+app.use(cors());
+
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: { origin: "http://localhost:3000" },
+});
+
+// socket.id -> username
+const users = {};
+
+io.on("connection", (socket) => {
+  console.log("Connected:", socket.id);
+  socket.on("typing", (username) => {
+  socket.broadcast.emit("typing", username);
+});
+
+socket.on("stop_typing", (username) => {
+  socket.broadcast.emit("stop_typing", username);
+});
+
+
+  socket.on("join", (username) => {
+    users[socket.id] = username;
+
+    io.emit("users", Object.values(users));
+  });
+
+  socket.on("send_message", (data) => {
+    io.emit("receive_message", data);
+  });
+
+  socket.on("disconnect", () => {
+    delete users[socket.id];
+    io.emit("users", Object.values(users));
+  });
+});
+
+server.listen(3002, () => {
+  console.log("✅ Server running on http://localhost:3002");
+});
