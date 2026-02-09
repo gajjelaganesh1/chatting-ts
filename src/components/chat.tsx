@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
-const socket = io("http://localhost:3002");
-
+const socket = io("http://localhost:3001")
 interface Message {
   author: string;
   text: string;

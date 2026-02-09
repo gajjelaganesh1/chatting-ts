@@ -41,6 +41,7 @@ socket.on("stop_typing", (username) => {
   });
 });
 
-server.listen(3002, () => {
-  console.log("✅ Server running on http://localhost:3002");
+const PORT = process.env.PORT || 3001;
+server.listen(PORT, () => {
+  console.log("✅ server running on", PORT);
 });
