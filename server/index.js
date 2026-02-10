@@ -7,6 +7,11 @@ const app = express();
 
 app.use(cors({ origin: "*"}));
 
+app.get("/", (req, res) => {
+  res.send("OK");
+});
+
+
 const server = http.createServer(app);
 
 const io = new Server(server, {
